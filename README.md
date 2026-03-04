@@ -1,3 +1,31 @@
+# V4 UTM Manager
+
+Ferramenta essencial para **Equipes de Marketing Digital** que precisam criar, padronizar e organizar links UTM para rastreamento de campanhas.
+
+## 🎯 Público-Alvo
+
+Perfeito para:
+- **Social Media Managers** - Links para bio, posts, stories
+- **Content Creators** - Links em e-books, webinars, materiais ricos  
+- **CRM/Email Marketing** - Disparos com rastreamento preciso
+- **Account Managers** - Links personalizados para clientes
+- **Marketing Teams** - Campanhas orgânicas e multi-canal
+
+## ✅ Benefícios
+
+- **Zero erros** na montagem de UTMs
+- **Padronização automática** de campanhas
+- **Histórico persistente** no navegador
+- **Geração e cópia** em 2 cliques
+
+## 🚀 Como Usar
+
+1. Preencha URL, fonte, meio e campanha
+2. Clique em "Gerar e Copiar Link"
+3. Pronto! Link copiado e salvo no histórico
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

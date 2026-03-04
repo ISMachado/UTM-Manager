@@ -1,65 +1,130 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import UTMForm from "@/components/UTMForm";
+import LinkHistory from "@/components/LinkHistory";
+import { Zap } from "lucide-react";
+
+interface LinkHistory {
+  id: string;
+  url: string;
+  createdAt: string;
+}
 
 export default function Home() {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleGenerateLink = (link: string) => {
+    // Salvar no localStorage
+    try {
+      const existingLinks = localStorage.getItem("utm_links_history");
+      const links: LinkHistory[] = existingLinks
+        ? JSON.parse(existingLinks)
+        : [];
+
+      const newLink: LinkHistory = {
+        id: Date.now().toString(),
+        url: link,
+        createdAt: new Date().toISOString(),
+      };
+
+      links.push(newLink);
+      localStorage.setItem("utm_links_history", JSON.stringify(links));
+
+      // Trigger refresh do histórico
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (error) {
+      console.error("Erro ao salvar link:", error);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-slate-950">
+      {/* Header */}
+      <header className="border-b border-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">
+                  V4 UTM Manager
+                </h1>
+                <p className="text-slate-400 text-sm">
+                  Gerenciador e Padronizador de UTMs
+                </p>
+              </div>
+            </div>
+            <div className="text-slate-500 text-sm">
+              Equipes de Marketing Digital V4 Company
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Formulário */}
+          <div>
+            <UTMForm onGenerateLink={handleGenerateLink} />
+          </div>
+
+          {/* Histórico */}
+          <div>
+            <LinkHistory refreshTrigger={refreshTrigger} />
+          </div>
+        </div>
+
+        {/* Info Section */}
+        <div className="mt-12 bg-slate-900/50 rounded-2xl border border-slate-800/50 p-8">
+          <h3 className="text-xl font-bold text-white mb-4">Como funciona?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-red-400 font-bold">1</span>
+              </div>
+              <h4 className="text-white font-semibold mb-2">
+                Preencha os Campos
+              </h4>
+              <p className="text-slate-400 text-sm">
+                Informe a URL, fonte, meio e campanha
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-red-400 font-bold">2</span>
+              </div>
+              <h4 className="text-white font-semibold mb-2">Gere o Link</h4>
+              <p className="text-slate-400 text-sm">
+                Clique para gerar e copiar o link UTM
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span className="text-red-400 font-bold">3</span>
+              </div>
+              <h4 className="text-white font-semibold mb-2">
+                Acompanhe o Histórico
+              </h4>
+              <p className="text-slate-400 text-sm">
+                Visualize e reutilize links anteriores
+              </p>
+            </div>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-900 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center text-slate-500 text-sm">
+            © 2024 V4 Company. Todos os direitos reservados.
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
